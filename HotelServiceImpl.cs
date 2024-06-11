@@ -142,29 +142,7 @@ namespace HotelReservationSystem
                             Console.WriteLine($"{hotel_Name}->{total_Cost}");
                             Console.WriteLine("----------------------------------------------------------------------------------------------");
                             break;
-                        case 2:
-                            min_Cost = (from hotel in service.addHotels()
-                                            select new { weekRate = hotel.Weekday_Rates_For_Rewards_Customers*week, 
-                                            weekendRate = hotel.Weekend_Rates_For_Rewards_Customers*weekend, Hotel_Name = hotel.HotelName})
-                                            .GroupBy(x => x.Hotel_Name);
-                            foreach (var cost in min_Cost)
-                            { 
-                                double hotel_Cost = cost.Sum(i => i.weekRate + i.weekendRate);
-                                if (total_Cost > hotel_Cost)
-                                {
-                                    total_Cost = hotel_Cost;
-                                    hotel_Cost = 0;
-                                    foreach (var item in cost)
-                                    {
-                                        hotel_Name = item.Hotel_Name;
-                                    }
-                                }
-
-                            }
-                            Console.WriteLine("----------------------------------------------------------------------------------------------");
-                            Console.WriteLine($"{hotel_Name}->{total_Cost}");
-                            Console.WriteLine("----------------------------------------------------------------------------------------------");
-                            break;
+                        
                     }
                 }
                 else
