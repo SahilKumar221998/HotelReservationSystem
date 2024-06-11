@@ -200,7 +200,7 @@ namespace HotelReservationSystem
                                                     weekendRate = hotel.Weekend_Rates_For_Rewards_Customers * weekend,
                                                     Hotel_Name = hotel.HotelName
                                                 })
-                    .GroupBy(x => x.Hotel_Name);
+                                              .GroupBy(x => x.Hotel_Name);
                                     foreach (var cost in min_Cost)
                                     {
                                         double hotel_Cost = cost.Sum(i => i.weekRate + i.weekendRate);
@@ -217,6 +217,19 @@ namespace HotelReservationSystem
                                     }
                                     Console.WriteLine("----------------------------------------------------------------------------------------------");
                                     Console.WriteLine($"{hotel_Name}->{total_Cost}");
+                                    Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                    break;
+                                //Uc-10Cheap hotel based on rates and ratings for reward customer
+                                case 2:
+                                    var min_Cost_Rates = (from hotel in service.addHotels()
+                                                          select new
+                                                          {
+                                                              ratings = hotel.Ratings,
+                                                              rates = hotel.Weekday_Rates_For_Rewards_Customers * week + hotel.Weekend_Rates_For_Rewards_Customers * weekend,
+                                                              Hotel_Name = hotel.HotelName
+                                                          }).OrderBy(x => x.rates).ThenBy(x => x.ratings).FirstOrDefault();
+                                    Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                    Console.WriteLine($"HotelName:{min_Cost_Rates.Hotel_Name} Hotel Price:{min_Cost_Rates.rates} Hotel Rating:{min_Cost_Rates.ratings}");
                                     Console.WriteLine("----------------------------------------------------------------------------------------------");
                                     break;
                             }
