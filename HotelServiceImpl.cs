@@ -169,7 +169,7 @@ namespace HotelReservationSystem
                                         Console.WriteLine($"HotelName:{min_Cost_Rates.Hotel_Name} Hotel Price:{min_Cost_Rates.rates} Hotel Rating:{min_Cost_Rates.ratings}");
                                         Console.WriteLine("----------------------------------------------------------------------------------------------");
                                         break;
-                                    //Uc:-7Hotel based on best rating
+                                    //Uc:-7Hotel based on best rating for regular customers
                                     case 3:
                                         var min_Ratings = (from hotel in service.addHotels()
                                                            select new
@@ -230,6 +230,19 @@ namespace HotelReservationSystem
                                                           }).OrderBy(x => x.rates).ThenBy(x => x.ratings).FirstOrDefault();
                                     Console.WriteLine("----------------------------------------------------------------------------------------------");
                                     Console.WriteLine($"HotelName:{min_Cost_Rates.Hotel_Name} Hotel Price:{min_Cost_Rates.rates} Hotel Rating:{min_Cost_Rates.ratings}");
+                                    Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                    break;
+                                //Uc:-7Hotel based on best rating for reward customer
+                                case 3:
+                                    var min_Ratings = (from hotel in service.addHotels()
+                                                       select new
+                                                       {
+                                                           ratings = hotel.Ratings,
+                                                           Hotel_Name = hotel.HotelName,
+                                                           Hotel_Price = hotel.Weekday_Rates_For_Rewards_Customers * week + hotel.Weekend_Rates_For_Rewards_Customers * weekend
+                                                       }).OrderByDescending(x => x.ratings).FirstOrDefault();
+                                    Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                    Console.WriteLine($"Hotel Name:-{min_Ratings.Hotel_Name} Hotel_Rating:-{min_Ratings.ratings} Hotel_Price:-{min_Ratings.Hotel_Price}");
                                     Console.WriteLine("----------------------------------------------------------------------------------------------");
                                     break;
                             }
