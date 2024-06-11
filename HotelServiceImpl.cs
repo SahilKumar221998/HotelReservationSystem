@@ -111,62 +111,90 @@ namespace HotelReservationSystem
                         weekend++;
                     temps=temps.AddDays(1);
                 }
-                // Calculating cheap hotel based on rates
+                // Calculating cheap hotel based on rates for regular customer
                 if(date1.Date<date2.Date)
                 {
                     IHotelService service = new HotelServiceImpl();
+                    //Asking Regular Customer choice based on rates and ratings
                     switch (choice)
-                    { 
+                    {
                         
                         case 1:
                             Console.WriteLine("Enter your choice :- ");
-                            Console.WriteLine("1.Cheap Hotel\n2.Best Rated Cheap Hotel");
+                            Console.WriteLine("1.Cheap Hotel\n2.Best Rated Cheap Hotel\n3.Best Rated Hotel");
                             int ch=Convert.ToInt32(Console.ReadLine());
-                            switch (ch)
-                            {
-                                case 1:
-                                    var min_Cost = (from hotel in service.addHotels()
-                                                    select new
-                                                    {
-                                                        weekRate = hotel.Weekday_Rates_For_Regular_Customer * week,
-                                                        weekendRate = hotel.Weekend_Rates_For_Regular_Customers * weekend,
-                                                        Hotel_Name = hotel.HotelName
-                                                    })
-                                            .GroupBy(x => x.Hotel_Name);
-                                    foreach (var cost in min_Cost)
-                                    {
-                                        double hotel_Cost = cost.Sum(i => i.weekRate + i.weekendRate);
-                                        if (total_Cost > hotel_Cost)
+                          
+                                switch (ch)
+                                {
+                                    //Uc(1-4)Cheap hotel based on rates for regular customer
+                                    case 1:
+                                        var min_Cost = (from hotel in service.addHotels()
+                                                        select new
+                                                        {
+                                                            weekRate = hotel.Weekday_Rates_For_Regular_Customer * week,
+                                                            weekendRate = hotel.Weekend_Rates_For_Regular_Customers * weekend,
+                                                            Hotel_Name = hotel.HotelName
+                                                        })
+                                                .GroupBy(x => x.Hotel_Name);
+                                        foreach (var cost in min_Cost)
                                         {
-                                            total_Cost = hotel_Cost;
-                                            hotel_Cost = 0;
-                                            foreach (var item in cost)
+                                            double hotel_Cost = cost.Sum(i => i.weekRate + i.weekendRate);
+                                            if (total_Cost > hotel_Cost)
                                             {
-                                                hotel_Name = item.Hotel_Name;
+                                                total_Cost = hotel_Cost;
+                                                hotel_Cost = 0;
+                                                foreach (var item in cost)
+                                                {
+                                                    hotel_Name = item.Hotel_Name;
 
+                                                }
                                             }
+
                                         }
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                        Console.WriteLine($"{hotel_Name}->{total_Cost}");
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                        break;
 
-                                    }
-                                    Console.WriteLine("----------------------------------------------------------------------------------------------");
-                                    Console.WriteLine($"{hotel_Name}->{total_Cost}");
-                                    Console.WriteLine("----------------------------------------------------------------------------------------------");
-                                    break;
-                                case 2: var min_Cost_rates = (from hotel in service.addHotels()
+                                    //Uc-6,7Cheap hotel based on rates and ratings for regular customer
+                                    case 2:
+                                        var min_Cost_Rates = (from hotel in service.addHotels()
                                                               select new
-                                                              { 
-                                                                  ratings=hotel.Ratings,
-                                                                  rates=hotel.Weekday_Rates_For_Regular_Customer*week+hotel.Weekend_Rates_For_Regular_Customers*weekend,
+                                                              {
+                                                                  ratings = hotel.Ratings,
+                                                                  rates = hotel.Weekday_Rates_For_Regular_Customer * week + hotel.Weekend_Rates_For_Regular_Customers * weekend,
                                                                   Hotel_Name = hotel.HotelName
-                                                              }).OrderBy(x => x.rates).ThenBy(x=>x.ratings).FirstOrDefault();
-                                    Console.WriteLine($"HotelName:{min_Cost_rates.Hotel_Name} Hotel Price:{min_Cost_rates.rates} Hotel Rating:{min_Cost_rates.ratings}");
+                                                              }).OrderBy(x => x.rates).ThenBy(x => x.ratings).FirstOrDefault();
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                        Console.WriteLine($"HotelName:{min_Cost_Rates.Hotel_Name} Hotel Price:{min_Cost_Rates.rates} Hotel Rating:{min_Cost_Rates.ratings}");
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                        break;
+                                    //Uc:-7Hotel based on best rating
+                                    case 3:
+                                        var min_Ratings = (from hotel in service.addHotels()
+                                                           select new
+                                                           {
+                                                               ratings = hotel.Ratings,
+                                                               Hotel_Name = hotel.HotelName,
+                                                               Hotel_Price = hotel.Weekday_Rates_For_Regular_Customer * week + hotel.Weekend_Rates_For_Regular_Customers * weekend
+                                                           }).OrderByDescending(x => x.ratings).FirstOrDefault();
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                        Console.WriteLine($"Hotel Name:-{min_Ratings.Hotel_Name} Hotel_Rating:-{min_Ratings.ratings} Hotel_Price:-{min_Ratings.Hotel_Price}");
+                                        Console.WriteLine("----------------------------------------------------------------------------------------------");
+                                        break;
 
-                                    break;
+                                }
+                                 break;
+                            //Uc:-9 Reward Customer
+                        case 2:
+                            Console.WriteLine("Enter your choice :- ");
+                            Console.WriteLine("1.Cheap Hotel\n2.Best Rated Cheap Hotel\n3.Best Rated Hotel");
+                            int choices = Convert.ToInt32(Console.ReadLine());
+                            switch(choices)
+                            {
 
-                               
                             }
                             break;
-                        
                     }
                 }
                 else
