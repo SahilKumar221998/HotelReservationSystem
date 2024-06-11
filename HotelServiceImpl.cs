@@ -14,9 +14,9 @@ namespace HotelReservationSystem
         public List<Hotels> addHotels()
         {
             List<Hotels> hotel_list = new List<Hotels>();
-            hotel_list.Add(new Hotels("LakeWood",110.0, 80.0, 90.0, 80.0));
-            hotel_list.Add(new Hotels("BridgeWood",160.0, 110.0, 60.0, 50.0));
-            hotel_list.Add(new Hotels("RidgeWood", 220.0, 100.0, 150.0, 40.0));
+            hotel_list.Add(new Hotels("LakeWood",110.0, 80.0, 90.0, 80.0,3));
+            hotel_list.Add(new Hotels("BridgeWood",160.0, 110.0, 60.0, 50.0,4));
+            hotel_list.Add(new Hotels("RidgeWood", 220.0, 100.0, 150.0, 40.0,5));
             return hotel_list;  
         }
 
@@ -119,7 +119,7 @@ namespace HotelReservationSystem
                     { 
                         
                         case 1:
-                            Console.WriteLine("Eneter your choice :- ");
+                            Console.WriteLine("Enter your choice :- ");
                             Console.WriteLine("1.Cheap Hotel\n2.Best Rated Cheap Hotel");
                             int ch=Convert.ToInt32(Console.ReadLine());
                             switch (ch)
@@ -152,8 +152,18 @@ namespace HotelReservationSystem
                                     Console.WriteLine($"{hotel_Name}->{total_Cost}");
                                     Console.WriteLine("----------------------------------------------------------------------------------------------");
                                     break;
-                                case 2: var min_Cost_rates=
-                                        break;
+                                case 2: var min_Cost_rates = (from hotel in service.addHotels()
+                                                              select new
+                                                              { 
+                                                                  ratings=hotel.Ratings,
+                                                                  rates=hotel.Weekday_Rates_For_Regular_Customer*week+hotel.Weekend_Rates_For_Regular_Customers*weekend,
+                                                                  Hotel_Name = hotel.HotelName
+                                                              }).OrderBy(x => x.rates).ThenBy(x=>x.ratings).FirstOrDefault();
+                                    Console.WriteLine($"HotelName:{min_Cost_rates.Hotel_Name} Hotel Price:{min_Cost_rates.rates} Hotel Rating:{min_Cost_rates.ratings}");
+
+                                    break;
+
+                               
                             }
                             break;
                         
